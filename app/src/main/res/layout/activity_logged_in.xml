@@ -14,10 +14,10 @@
         android:layout_centerInParent="true" />
 
     <Button
-        android:id="@+id/btnLogout"
+        android:id="@+id/accountBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log Out Of Spotify"
-        android:onClick="logoutOnClick" />
+        android:onClick="logoutOnClick"
+        android:text="Wraps" />
 
 </RelativeLayout>
