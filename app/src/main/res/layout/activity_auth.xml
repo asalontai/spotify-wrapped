@@ -5,5 +5,12 @@
 
     <!-- Add your UI elements for authentication here -->
     <!-- For example, you can add a WebView for web-based authentication -->
-
+    <TextView
+        android:id="@+id/textViewLoggedInMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/you_are_logged_in_to_spotify_wrapped"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerInParent="true" />
 </RelativeLayout>

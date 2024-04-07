@@ -61,8 +61,8 @@ public class LoggedInActivity extends AppCompatActivity {
     }
 
     public void logoutOnClick(View view) {
-        // Launch the Spotify logout URL in a browser
-        String logoutUrl = "https://accounts.spotify.com";
+        // Launch the Spotify logout URL in a browser with the custom redirect URI
+        String logoutUrl = "https://accounts.spotify.com/logout?continue=spotify-wrapped://logout";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(logoutUrl));
         startActivity(intent);
         finish();
