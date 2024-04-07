@@ -33,7 +33,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Specify the custom scheme for the callback URL -->
-                <data android:scheme="spotify-wrapped" />
+                <data
+                    android:host="logout"
+                    android:scheme="spotify-wrapped" />
             </intent-filter>
         </activity> <!-- MainActivity - Entry point of the app -->
         <activity
@@ -44,7 +46,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- AuthActivity - Handles Spotify authentication -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Specify the custom scheme for the callback URL -->
+                <data android:scheme="spotify-wrapped"
+                    android:host="callback" />
+            </intent-filter>
+        </activity>
+
+
+        <!-- AuthActivity - Handles Spotify authentication -->
         <activity
             android:name=".AuthActivity"
             android:exported="true"
