@@ -19,6 +19,8 @@ public class AuthActivity extends AppCompatActivity {
 
     // Request code for authentication
     private static final int AUTH_REQUEST_CODE = 123;
+    public static String accessToken;
+    public static String accessCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +55,8 @@ public class AuthActivity extends AppCompatActivity {
                 // Response was successful and contains auth token
                 case TOKEN:
                     // Handle successful response
-                    String accessToken = response.getAccessToken();
+                    accessToken = response.getAccessToken();
+                    accessCode = response.getCode();
                     // Start LoggedInActivity
                     Intent loggedInIntent = new Intent(this, LoggedInActivity.class);
                     startActivity(loggedInIntent);
@@ -75,4 +78,5 @@ public class AuthActivity extends AppCompatActivity {
             }
         }
     }
+
 }
