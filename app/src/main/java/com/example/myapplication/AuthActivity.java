@@ -18,6 +18,8 @@ public class AuthActivity extends AppCompatActivity {
 
     // Request code for authentication
     private static final int AUTH_REQUEST_CODE = 123;
+    public static String accessToken;
+    public static String accessCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,17 +58,18 @@ public class AuthActivity extends AppCompatActivity {
                 // Handle the authentication response
                 AuthorizationResponse response = AuthorizationResponse.fromUri(uri);
 
-                switch (response.getType()) {
-                    // Response was successful and contains auth token
-                    case TOKEN:
-                        // Handle successful response
-                        String accessToken = response.getAccessToken();
-                        // Start LoggedInActivity
-                        Intent loggedInIntent = new Intent(this, LoggedInActivity.class);
-                        startActivity(loggedInIntent);
-                        // Finish AuthActivity to prevent returning to it with back button
-                        finish();
-                        break;
+            switch (response.getType()) {
+                // Response was successful and contains auth token
+                case TOKEN:
+                    // Handle successful response
+                    accessToken = response.getAccessToken();
+                    accessCode = response.getCode();
+                    // Start LoggedInActivity
+                    Intent loggedInIntent = new Intent(this, LoggedInActivity.class);
+                    startActivity(loggedInIntent);
+                    // Finish AuthActivity to prevent returning to it with back button
+                    finish();
+                    break;
 
                     // Auth flow returned an error
                     case ERROR:
