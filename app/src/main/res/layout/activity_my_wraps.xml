@@ -15,7 +15,8 @@
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="27dp" />
+        tools:layout_editor_absoluteY="27dp"
+        />
 
     <Button
         android:id="@+id/generateWrapsBtn"
@@ -27,6 +28,86 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/image1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        tools:layout_editor_absoluteX="24dp"
+        tools:layout_editor_absoluteY="101dp" />
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        tools:layout_editor_absoluteX="24dp"
+        tools:layout_editor_absoluteY="201dp"
+        android:text="Text1"/>
+
+    <ImageView
+        android:id="@+id/image2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="275dp" />
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Text2"
+        tools:layout_editor_absoluteX="155dp"
+        tools:layout_editor_absoluteY="201dp" />
+
+    <ImageView
+        android:id="@+id/image3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        tools:layout_editor_absoluteX="155dp"
+        tools:layout_editor_absoluteY="101dp" />
+
+    <TextView
+        android:id="@+id/text3"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Text3"
+        tools:layout_editor_absoluteX="286dp"
+        tools:layout_editor_absoluteY="201dp" />
+
+    <ImageView
+        android:id="@+id/image4"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        tools:layout_editor_absoluteX="286dp"
+        tools:layout_editor_absoluteY="101dp" />
+
+    <TextView
+        android:id="@+id/text4"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Text4"
+        tools:layout_editor_absoluteX="85dp"
+        tools:layout_editor_absoluteY="375dp" />
+
+    <ImageView
+        android:id="@+id/image5"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        tools:layout_editor_absoluteX="225dp"
+        tools:layout_editor_absoluteY="275dp" />
+
+    <TextView
+        android:id="@+id/text5"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Text5"
+        tools:layout_editor_absoluteX="225dp"
+        tools:layout_editor_absoluteY="375dp" />
 
     <Button
         android:id="@+id/MyAccountBtn"
