@@ -1,27 +1,17 @@
 package com.example.myapplication;
 
-import static androidx.compose.ui.semantics.SemanticsPropertiesKt.setText;
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.spotify.sdk.android.auth.AuthorizationClient;
-import com.spotify.sdk.android.auth.AuthorizationRequest;
-import com.spotify.sdk.android.auth.AuthorizationResponse;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -36,9 +26,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class LoggedInActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
-    private Button settingsBtn, myAccount;
+    private Button backBtn;
 
     private final OkHttpClient mOkHttpClient = new OkHttpClient();
     private Call mCall;
@@ -47,30 +37,18 @@ public class LoggedInActivity extends AppCompatActivity {
 
 
 
-    private TextView tokenTextView, codeTextView, profileTextView, welcomeMessageName;
+    private TextView profileName, profileAge, profileFollowers;
 
     private ImageView profileImage;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_logged_in);
-
-        //my account button is to go to account settings
-        myAccount = findViewById(R.id.landingToAccount);
-        myAccount.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_settings);
+        backBtn = findViewById(R.id.toWrapsBtn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoggedInActivity.this, SettingsActivity.class);
-                startActivity(intent);
-            }
-        });
-        //settings button is to go to generate a new wrap page
-        settingsBtn = findViewById(R.id.accountBtn);
-        settingsBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoggedInActivity.this, MyWrapsActivity.class);
+                Intent intent = new Intent(SettingsActivity.this, MyWrapsActivity.class);
                 startActivity(intent);
             }
         });
@@ -85,20 +63,19 @@ public class LoggedInActivity extends AppCompatActivity {
         onGetUserProfileClicked();
 
         profileImage = findViewById(R.id.profileImage);
-        welcomeMessageName = findViewById(R.id.welcomeMessageName);
-
+        profileName = findViewById(R.id.profileName);
+        profileAge = findViewById(R.id.profileAge);
+        profileFollowers = findViewById(R.id.profileFollowers);
     }
-
-
     public void logoutOnClick(View view) {
+        // Clear the access token
+        AuthActivity.accessToken = null;
         // Launch the Spotify logout URL in a browser with the custom redirect URI
         String logoutUrl = "https://accounts.spotify.com/logout?continue=spotify-wrapped://logout";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(logoutUrl));
         startActivity(intent);
         finish();
     }
-
-
 
 
     public void onGetUserProfileClicked() {
@@ -123,7 +100,7 @@ public class LoggedInActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.d("HTTP", "Failed to fetch data: " + e);
-                Toast.makeText(LoggedInActivity.this, "Failed to fetch data, watch Logcat for more details",
+                Toast.makeText(SettingsActivity.this, "Failed to fetch data, watch Logcat for more details",
                         Toast.LENGTH_SHORT).show();
             }
 
@@ -134,8 +111,6 @@ public class LoggedInActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
-
-                    setTextAsync(jsonObject.toString(3), profileTextView);
                     final String jsonData = jsonObject.toString(3);
 
                     //get profile image
@@ -145,6 +120,8 @@ public class LoggedInActivity extends AppCompatActivity {
 
                     //get username
                     String displayName = jsonObject.getString("display_name");
+                    int followerCount = jsonObject.getJSONObject("followers").getInt("total");
+                    String followerCountStr = String.valueOf(followerCount);
 
 
                     // Run UI-related operation on the main UI thread
@@ -153,15 +130,24 @@ public class LoggedInActivity extends AppCompatActivity {
                         public void run() {
                             //setTextAsync(jsonData, profileTextView);
                             loadImage(imageUrl, profileImage);
-                            setTextAsync("Welcome, " + displayName + "!", welcomeMessageName);
+                            setTextAsync(displayName, profileName);
+                            setTextAsync("Number of Followers: " + followerCountStr, profileFollowers);
                         }
                     });
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(LoggedInActivity.this, "Failed to parse data, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
+
+                    // Show Toast message on the main UI thread
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(SettingsActivity.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
+
         });
     }
 
