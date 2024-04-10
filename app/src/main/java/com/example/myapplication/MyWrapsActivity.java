@@ -41,6 +41,8 @@ public class MyWrapsActivity extends AppCompatActivity {
     private Button toMyAccountBtn;
     private int completedCalls = 0;
     private Button year, sixMonths, current;
+    private String listeningHistory = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,6 +249,17 @@ public class MyWrapsActivity extends AppCompatActivity {
 
     private void onDataFetched() {
         if (completedCalls == 2) {
+            StringBuilder listeningHistoryBuilder = new StringBuilder();
+
+            // Concatenate the track names
+            for (String trackName : trackNames) {
+                if (trackName != null) {
+                    listeningHistoryBuilder.append(trackName).append("\n");
+                }
+            }
+
+            // Convert StringBuilder to String
+            listeningHistory = listeningHistoryBuilder.toString().trim();
             runOnUiThread(() -> {
                 // Update UI elements with artist and track data
                 text1.setText(artistNames[0]);
@@ -286,5 +299,11 @@ public class MyWrapsActivity extends AppCompatActivity {
     protected void onDestroy() {
         cancelCall(stCall);
         super.onDestroy();
+    }
+    public void onGemButtonClick(View view) {
+        // Start LLMActivity when the button is clicked
+        Intent intent = new Intent(this, LLMActivity.class);
+        intent.putExtra("listeningHistory", listeningHistory);
+        startActivity(intent);
     }
 }
