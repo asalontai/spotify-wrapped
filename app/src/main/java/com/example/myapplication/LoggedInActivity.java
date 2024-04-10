@@ -113,13 +113,29 @@ public class LoggedInActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
-                    setTextAsync(jsonObject.toString(3), profileTextView);
+                    final String jsonData = jsonObject.toString(3);
+
+                    // Run UI-related operation on the main UI thread
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setTextAsync(jsonData, profileTextView);
+                        }
+                    });
                 } catch (JSONException e) {
                     Log.d("JSON", "Failed to parse data: " + e);
-                    Toast.makeText(LoggedInActivity.this, "Failed to parse data, watch Logcat for more details",
-                            Toast.LENGTH_SHORT).show();
+
+                    // Show Toast message on the main UI thread
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoggedInActivity.this, "Failed to parse data, watch Logcat for more details",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
+
         });
     }
 

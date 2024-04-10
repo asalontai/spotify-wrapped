@@ -56,13 +56,14 @@
                 android:layout_weight="1"
                 android:text="Get User Profile" />
         </LinearLayout>
-      <Button
-        android:id="@+id/accountBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/textViewLoggedInMessage"
-        android:layout_marginBottom="237dp"
-        android:text="Wraps" />
+
+        <Button
+            android:id="@+id/accountBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textViewLoggedInMessage"
+            android:layout_marginBottom="237dp"
+            android:text="Wraps" />
     </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
