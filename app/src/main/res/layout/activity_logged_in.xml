@@ -1,69 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="50px"
+        android:layout_marginBottom="50px"
+        android:layout_marginLeft="40px"
+        android:layout_marginRight="40px">
+
+
 
         <Button
-            android:id="@+id/btnLogout"
+            android:id="@+id/landingToAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log Out Of Spotify"
-            android:onClick="logoutOnClick" />
-
-        <TextView
-            android:id="@+id/token_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            tools:text="Token:" />
-
-
-
-        <TextView
-            android:id="@+id/code_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            tools:text="Code:" />
-
-
-        <TextView
-            android:id="@+id/response_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="10sp"
-            tools:text="Line 1\nLine 2\nLine 3" />
+            android:text="My Account"
+            android:layout_gravity="right"
+            android:textSize="15dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="#CD7EB7"
+            android:backgroundTint="#F3F3F3"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
 
-            <Button
-                android:id="@+id/profile_btn"
-                android:layout_width="0dp"
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginRight="17dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_margin="8dp"
-                android:layout_weight="1"
-                android:text="Get User Profile" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/welcomeMessageName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="17dp"
+                    android:textSize="25dp"
+                    android:textStyle="bold"
+                    android:textColor="#CD7EB7"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="Below are your past wraps. Click “New Wrap” to generate a new wrap."/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
-        <Button
-            android:id="@+id/accountBtn"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/textViewLoggedInMessage"
-            android:layout_marginBottom="237dp"
-            android:text="Wraps" />
+            android:text="Your Previous Wraps:"
+            android:textColor="#CD7EB7"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
+
+
     </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="50px"
+        android:layout_marginBottom="50px"
+        android:layout_marginLeft="30px"
+        android:layout_marginRight="30px">
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log Out Of Spotify (this button will be deleted later)"
+            android:onClick="logoutOnClick"
+            android:backgroundTint="#D9D9D9"/>
+        <Button
+            android:id="@+id/accountBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textViewLoggedInMessage"
+            android:text="+ Generate New Wrap"
+            android:textColor="@color/white"
+            android:backgroundTint="#CD7EB7"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
