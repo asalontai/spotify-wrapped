@@ -27,15 +27,23 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Start the authentication process
-        startAuthentication();
+        // Check if the access token is null
+        if (accessToken == null) {
+            // Start the authentication process
+            startAuthentication();
+        } else {
+            // Start LoggedInActivity if the access token is not null
+            Intent loggedInIntent = new Intent(this, LoggedInActivity.class);
+            startActivity(loggedInIntent);
+            finish(); // Finish AuthActivity to prevent returning to it with back button
+        }
     }
 
     private void startAuthentication() {
         // Construct the authentication request
         AuthorizationRequest.Builder builder =
                 new AuthorizationRequest.Builder(CLIENT_ID, AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
-        builder.setScopes(new String[]{"streaming"});
+        builder.setScopes(new String[]{"user-top-read", "playlist-read-private"});
         builder.setShowDialog(true); // Show dialog for log out option
         AuthorizationRequest request = builder.build();
 
