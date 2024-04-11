@@ -61,6 +61,7 @@ public class MyWrapsActivity extends AppCompatActivity {
         toMyAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                stopPlaying();
                 Intent intent = new Intent(MyWrapsActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
