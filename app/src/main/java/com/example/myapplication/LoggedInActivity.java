@@ -49,6 +49,7 @@ public class LoggedInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logged_in);
+        //second in command
         settingsBtn = findViewById(R.id.accountBtn);
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,7 +114,7 @@ public class LoggedInActivity extends AppCompatActivity {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     final String jsonData = jsonObject.toString(3);
-
+                    // mr am i doing a good job
                     // Run UI-related operation on the main UI thread
                     runOnUiThread(new Runnable() {
                         @Override

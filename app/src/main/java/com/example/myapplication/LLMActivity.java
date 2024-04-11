@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.ai.client.generativeai.common.shared.HarmBlockThreshold;
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
@@ -38,7 +39,7 @@ public class LLMActivity extends AppCompatActivity {
 
         // Create a content object with text-only input
         Content content = new Content.Builder()
-                .addText("Given this listening history, write 5 character traits about the person. " + listeningHistory)
+                .addText("Given this listening history, write 5 character traits about the person. Start your response with 'Based on your listening history, you are...', and after listing the character traits, in a new line, recommend a few real songs related to those in the listening history." + listeningHistory)
                 .build();
         Log.d("content: ", listeningHistory);
         // Create an executor

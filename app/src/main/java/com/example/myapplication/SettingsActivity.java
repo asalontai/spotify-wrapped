@@ -11,9 +11,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Button backBtn;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {//group leader
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
         backBtn = findViewById(R.id.toWrapsBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
