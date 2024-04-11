@@ -2,6 +2,12 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
+import android.content.Context;
+import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,38 +24,45 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-
+import io.grpc.internal.JsonParser;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Headers;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
+
+interface ResponseLogic {
+    void handleResponse(Response response) throws IOException;
+}
 
 public class MyWrapsActivity extends AppCompatActivity {
 
-    private final OkHttpClient mOkHttpClient = new OkHttpClient();
-    private Call caCall, ctCall, saCall, stCall, yaCall, ytCall;
-    private String mAccessCode = AuthActivity.accessCode;
+    private final OkHttpClient client = new OkHttpClient();
+    private String sToken = AuthActivity.accessToken;
     private ImageView image1, image2, image3, image4, image5, image6, image7, image8, image9, image10;
     private TextView text1, text2, text3, text4, text5, text6, text7, text8, text9, text10;
-    private String[] artistNames = new String[5];
-    private String[] artistImageUrls = new String[5];
-
-    private String[] trackNames = new String[5];
-    private String[] trackImageUrls = new String[5];
-    private Button toMyAccountBtn;
+    private String[] artistNames = new String[5], artistImageUrls = new String[5];
+    private String[] trackNames = new String[5], trackImageUrls = new String[5], trackURIs = new String[5];
+    private String[] trackClipUrls = new String[5];
+    private Button toMyAccountBtn, year, sixMonths, current;
+    private MediaPlayer m;
+    private boolean isStreaming = false;
     private int completedCalls = 0;
-    private Button year, sixMonths, current;
+    private String listeningHistory = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        stopPlaying();
         setContentView(R.layout.activity_my_wraps);
         toMyAccountBtn = findViewById(R.id.MyAccountBtn);
         toMyAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                stopPlaying();
                 Intent intent = new Intent(MyWrapsActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
@@ -83,170 +96,150 @@ public class MyWrapsActivity extends AppCompatActivity {
 
         year.setOnClickListener((v) -> {
             completedCalls = 0; // Reset completed calls counter
-            getTopTracks("https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=5&offset=0", ytCall); // Pass the callback
-            getArtist("https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=5&offset=0", yaCall); // Pass the callback
+            getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=5&offset=0"); // Pass the callback
+            getArtist("https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=5&offset=0");
+            stopPlaying();
         });
-
         sixMonths.setOnClickListener((v) -> {
             completedCalls = 0; // Reset completed calls counter
-            getTopTracks("https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=5&offset=0", stCall); // Pass the callback
-            getArtist("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=5&offset=0", saCall); // Pass the callback
+            getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=5&offset=0"); // Pass the callback
+            getArtist("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=5&offset=0");
+            stopPlaying();
         });
-
         current.setOnClickListener((v) -> {
             completedCalls = 0; // Reset completed calls counter
-            getTopTracks("https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5&offset=0", ctCall); // Pass the callback
-            getArtist("https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5&offset=0", caCall); // Pass the callback
+            getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5&offset=0"); // Pass the callback
+            getArtist("https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5&offset=0");
+            stopPlaying();
+        });
+
+        imageClick(image6, 0);
+        imageClick(image7, 1);
+        imageClick(image8, 2);
+        imageClick(image9, 3);
+        imageClick(image10, 4);
+    }
+    public void imageClick(ImageView image, int i) {
+        image.setOnClickListener((v) -> {
+            stopPlaying();
+            isStreaming = false;
+
+            if (isStreaming) {
+                stopPlaying();
+                isStreaming = false;
+            } else {
+                startAudioStream(trackClipUrls[i]);
+                isStreaming = true;
+            }
         });
     }
+    private void getArtist(String url) {
+        fetchRequest(
+                new Request.Builder()
+                        .url(url)
+                        .addHeader("Authorization", "Bearer " + AuthActivity.accessToken)
+                        .build(),
+                response -> {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
 
-    private void getArtist(String url, Call call) {
-        if (AuthActivity.accessToken == null) {
-            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            Log.d("Token", AuthActivity.accessToken);
-        }
+                        try {
+                            JSONObject obj = new JSONObject(responseData);
+                            JSONArray items = obj.getJSONArray("items");
 
-        // Create a request to get the user profile
-        final Request request = new Request.Builder()
-                .url(url)
-                .addHeader("Authorization", "Bearer " + AuthActivity.accessToken)
-                .build();
+                            for(int i = 0; i < items.length(); i++) {
+                                JSONObject curr = items.getJSONObject(i);
+                                artistNames[i] = curr.getString("name");
 
-        Headers headers = request.headers();
-        for (String name : headers.names()) {
-            Log.d("Request Header", name + ": " + headers.get(name));
-        }
+                                JSONArray images = curr.getJSONArray("images");
+                                JSONObject image = images.getJSONObject(0); // Assuming the first image is the one to be displayed
+                                artistImageUrls[i] = image.getString("url");
+                            }
 
-        cancelCall(call);
-        call = mOkHttpClient.newCall(request);
-
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                if (!call.isCanceled()) {
-                    MyWrapsActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d("HTTP", "Failed to fetch data: " + e);
-                            Toast.makeText(MyWrapsActivity.this, "Failed to fetch data, watch Logcat for more details", Toast.LENGTH_SHORT).show();
+                            completedCalls++;
+                            onDataFetched();
+                        } catch(JSONException j) {
+                            Log.d("JSON", "Failed to parse data: " + j);
                         }
-                    });
-                }
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    Log.d("API response: Artist", responseData);
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        JSONArray items = jsonObject.getJSONArray("items");
-
-                        for (int i = 0; i < items.length(); i++) {
-                            JSONObject item = items.getJSONObject(i);
-                            String artistName = item.getString("name");
-                            artistNames[i] = artistName;
-
-                            JSONArray images = item.getJSONArray("images");
-                            JSONObject image = images.getJSONObject(0); // Assuming the first image is the one to be displayed
-                            String imageUrl = image.getString("url");
-                            artistImageUrls[i] = imageUrl;
-                        }
-                        Log.d("HTTP", "before fetched1");
-                        completedCalls++;
-                        onDataFetched(); // Call callback
-                        Log.d("HTTP", "after fetched1");
-                    } catch (JSONException e) {
-                        Log.d("JSON", "Failed to parse data: " + e);
-                        runOnUiThread(() -> Toast.makeText(MyWrapsActivity.this, "Failed to parse data", Toast.LENGTH_SHORT).show());
+                    } else {
+                        Log.d("Artist", "Unsuccessful: " + response.code());
                     }
-                } else {
-                    // Handle unsuccessful response
-                    runOnUiThread(() -> Toast.makeText(MyWrapsActivity.this, "Unsuccessful response", Toast.LENGTH_SHORT).show());
-                }
-            }
-
-        });
+                });
     }
+    private void getTracks(String url) {
+        fetchRequest(
+                new Request.Builder()
+                        .url(url)
+                        .addHeader("Authorization", "Bearer " + AuthActivity.accessToken)
+                        .build(),
+                response -> {
+                    if (response.isSuccessful()) {
+                        final String responseData = response.body().string();
 
-    private void getTopTracks(String url, Call call) {
-        Log.d("HTTP: Tracks", "Track method reached");
-        if (AuthActivity.accessToken == null) {
-            Toast.makeText(this, "You need to get an access token first!", Toast.LENGTH_SHORT).show();
-            return;
-        } else {
-            Log.d("Token", AuthActivity.accessToken);
-        }
+                        try {
+                            JSONObject obj = new JSONObject(responseData);
+                            JSONArray items = obj.getJSONArray("items");
 
-        // Create a request to get the user's top tracks
-        final Request request = new Request.Builder()
-                .url(url)
-                .addHeader("Authorization", "Bearer " + AuthActivity.accessToken)
-                .build();
+                            for(int i = 0; i < items.length(); i++){
+                                JSONObject curr = items.getJSONObject(i);
+                                trackNames[i] = curr.getString("name");
 
-        cancelCall(call);
-        call = mOkHttpClient.newCall(request);
+                                trackClipUrls[i] = curr.getString("preview_url");
 
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                if (!call.isCanceled()) {
-                    MyWrapsActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d("HTTP", "Failed to fetch data: " + e);
-                            Toast.makeText(MyWrapsActivity.this, "Failed to fetch data, watch Logcat for more details", Toast.LENGTH_SHORT).show();
+                                JSONObject album = curr.getJSONObject("album");
+                                JSONArray images = album.getJSONArray("images");
+                                JSONObject image = images.getJSONObject(0);
+                                trackImageUrls[i] = image.getString("url");
+
+                                trackURIs[i] = curr.getString("uri");
+                            }
+                            completedCalls++;
+                            onDataFetched();
+                        } catch (JSONException j){
+                            Log.d("JSON", "Failed to parse data: " + j);
                         }
-                    });
-                }
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    final String responseData = response.body().string();
-                    Log.d("API response: Tracks", responseData);
-                    try {
-                        JSONObject jsonObject = new JSONObject(responseData);
-                        JSONArray items = jsonObject.getJSONArray("items");
-
-                        for (int i = 0; i < items.length(); i++) {
-                            JSONObject item = items.getJSONObject(i);
-                            String trackName = item.getString("name");
-                            trackNames[i] = trackName;
-
-                            JSONObject album = item.getJSONObject("album");
-                            JSONArray images = album.getJSONArray("images");
-                            JSONObject image = images.getJSONObject(0); // Assuming the first image is the one to be displayed
-                            String imageUrl = image.getString("url");
-                            trackImageUrls[i] = imageUrl;
-                            Log.d("Array", trackNames[i]);
-                        }
-                        Log.d("HTTP", "before fetched2");
-                        completedCalls++;
-                        onDataFetched(); // Call callback
-                        Log.d("HTTP", "after fetched2");
-                    } catch (JSONException e) {
-                        Log.d("JSON", "Failed to parse data: " + e);
-                        runOnUiThread(() -> Toast.makeText(MyWrapsActivity.this, "Failed to parse data", Toast.LENGTH_SHORT).show());
+                    } else {
+                        Log.d("Tracks", "Unsuccessful: " + response.code());
                     }
-                } else {
-                    // Handle unsuccessful response
-                    runOnUiThread(() -> Toast.makeText(MyWrapsActivity.this, "Unsuccessful response", Toast.LENGTH_SHORT).show());
-                }
-            }
-        });
+                });
     }
-
+    public void startAudioStream(String url) {
+        if (m == null)
+            m = new MediaPlayer();
+        try {
+            m.setDataSource(url);
+            m.prepare();
+            m.setVolume(1f, 1f);
+            m.setLooping(false);
+            m.start();
+        } catch (Exception e) {
+            Log.d("AUDIO", "Error playing in SoundHandler: " + e.toString());
+        }
+    }
+    private void stopPlaying() {
+        if (m != null && m.isPlaying()) {
+            m.stop();
+            m.release();
+            m = new MediaPlayer();
+            m.reset();
+        }
+    }
     private void loadImage(String imageUrl, ImageView imageView) {
         Picasso.get().load(imageUrl).into(imageView);
     }
-
     private void onDataFetched() {
         if (completedCalls == 2) {
+            StringBuilder listeningHistoryBuilder = new StringBuilder();
+
+            // Concatenate the track names
+            for (String trackName : trackNames) {
+                if (trackName != null) {
+                    listeningHistoryBuilder.append(trackName).append("\n");
+                }
+            }
+
+            // Convert StringBuilder to String
+            listeningHistory = listeningHistoryBuilder.toString().trim();
             runOnUiThread(() -> {
                 // Update UI elements with artist and track data
                 text1.setText(artistNames[0]);
@@ -275,16 +268,37 @@ public class MyWrapsActivity extends AppCompatActivity {
             });
         }
     }
+    private void fetchRequest(Request req, ResponseLogic rl) {
+        if (sToken == null)
+            Toast.makeText(this, "You need an access token!", Toast.LENGTH_SHORT).show();
+        else
+            Log.d("Token", sToken);
 
-    private void cancelCall(Call mCall) {
-        if (mCall != null) {
-            mCall.cancel();
-        }
+        final Request request = req;
+
+        client.newCall(request).enqueue(new Callback() {
+            public void onFailure(Call call, IOException e) {
+                if (!call.isCanceled()) {
+                    MyWrapsActivity.this.runOnUiThread(() -> {
+                        Log.d("HTTP", "Failed to fetch data: " + e);
+                        Toast.makeText(MyWrapsActivity.this, "Failed to fetch data, check Logcat", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }
+
+            public void onResponse(Call call, Response response) throws IOException {
+                rl.handleResponse(response);
+            }
+        });
     }
-
     @Override
     protected void onDestroy() {
-        cancelCall(stCall);
         super.onDestroy();
+    }
+    public void onGemButtonClick(View view) {
+        // Start LLMActivity when the button is clicked
+        Intent intent = new Intent(this, LLMActivity.class);
+        intent.putExtra("listeningHistory", listeningHistory);
+        startActivity(intent);
     }
 }

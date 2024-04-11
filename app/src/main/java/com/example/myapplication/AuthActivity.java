@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -85,7 +86,8 @@ public class AuthActivity extends AppCompatActivity {
         // Construct the authentication request
         AuthorizationRequest.Builder builder =
                 new AuthorizationRequest.Builder(CLIENT_ID, AuthorizationResponse.Type.TOKEN, REDIRECT_URI);
-        builder.setScopes(new String[]{"user-top-read", "playlist-read-private"});
+
+        builder.setScopes(new String[]{"streaming", "user-top-read", "playlist-read-private"});
         builder.setShowDialog(true); // Show dialog for log out option
         AuthorizationRequest request = builder.build();
 

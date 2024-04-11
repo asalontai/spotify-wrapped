@@ -55,7 +55,9 @@
                     android:host="callback" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".LLMActivity">
+            <!-- Any intent filters if needed -->
+        </activity>
 
         <!-- AuthActivity - Handles Spotify authentication -->
         <activity

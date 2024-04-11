@@ -4,41 +4,119 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    tools:context=".SettingsActivity"
+    android:background="@color/white">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="My Account"
-        android:textSize="34sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="27dp" />
+        android:orientation="vertical"
+        android:layout_marginTop="50px"
+        android:layout_marginBottom="50px"
+        android:layout_marginLeft="40px"
+        android:layout_marginRight="40px"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/DeleteBtn"
-        android:layout_width="270dp"
-        android:layout_height="66dp"
-        android:text="Delete"
-        app:cornerRadius="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.18" />
+        <Button
+            android:id="@+id/toWrapsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back to Home ->"
+            app:cornerRadius="20dp"
+            android:layout_gravity="right"
+            android:textColor="#CD7EB7"
+            android:backgroundTint="#F3F3F3"/>
 
-    <Button
-        android:id="@+id/toWrapsBtn"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Account"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#CD7EB7"
+            android:layout_marginBottom="20dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginRight="17dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/profileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="11dp"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="#CD7EB7"/>
+                <TextView
+                    android:id="@+id/profileFollowers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:layout_marginBottom="11dp"/>
+                <TextView
+                    android:id="@+id/profileAge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15dp"
+                    android:text="Click below to log out or delete your account."/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="Back to Wrapped"
         app:cornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="16dp" />
+        tools:layout_editor_absoluteY="16dp"
+        android:orientation="vertical"
+        android:layout_marginTop="50px"
+        android:layout_marginBottom="50px"
+        android:layout_marginLeft="40px"
+        android:layout_marginRight="40px"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="logoutOnClick"
+            android:text="Log Out"
+            android:textColor="@color/white"
+            android:backgroundTint="#CD7EB7"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/DeleteBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Account"
+            app:cornerRadius="20dp"
+            android:textColor="#E43E3E"
+            android:backgroundTint="#F3F3F3"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/pastWrapsBtn"
