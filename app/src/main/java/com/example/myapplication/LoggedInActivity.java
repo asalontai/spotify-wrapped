@@ -66,7 +66,6 @@ public class LoggedInActivity extends AppCompatActivity {
         });
 
         //settings button is to go to generate a new wrap page
-
         settingsBtn = findViewById(R.id.accountBtn);
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +134,6 @@ public class LoggedInActivity extends AppCompatActivity {
                 try {
                     final JSONObject jsonObject = new JSONObject(response.body().string());
                     final String jsonData = jsonObject.toString(3);
-
                     //get profile image
                     JSONArray imagesArray = jsonObject.getJSONArray("images");
                     JSONObject firstImage = imagesArray.getJSONObject(0);
@@ -145,8 +143,6 @@ public class LoggedInActivity extends AppCompatActivity {
                     String displayName = jsonObject.getString("display_name");
                     int followerCount = jsonObject.getJSONObject("followers").getInt("total");
                     String followerCountStr = String.valueOf(followerCount);
-
-
                     // Run UI-related operation on the main UI thread
                     runOnUiThread(new Runnable() {
                         @Override
