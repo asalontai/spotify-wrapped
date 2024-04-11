@@ -13,40 +13,59 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="34">
-
-        <!-- Specify LoggedInActivity -->
+        <activity
+            android:name=".MyWrapsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity2"
+            android:exported="false" /> <!-- Specify LoggedInActivity -->
         <activity
             android:name=".LoggedInActivity"
+            android:exported="true"
             android:label="@string/title_activity_logged_in"
-            android:theme="@style/Theme.MyApplication"
-            android:exported="true">
+            android:theme="@style/Theme.MyApplication">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Specify the custom scheme for the callback URL -->
-                <data android:scheme="spotify-wrapped" />
+                <data
+                    android:host="logout"
+                    android:scheme="spotify-wrapped" />
             </intent-filter>
-        </activity>
-
-        <!-- MainActivity - Entry point of the app -->
+        </activity> <!-- MainActivity - Entry point of the app -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Specify the custom scheme for the callback URL -->
+                <data android:scheme="spotify-wrapped"
+                    android:host="callback" />
+            </intent-filter>
         </activity>
+
 
         <!-- AuthActivity - Handles Spotify authentication -->
         <activity
             android:name=".AuthActivity"
             android:exported="true"
             android:label="Authentication Activity"
-            android:launchMode="singleInstance" >
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Specify the correct host and scheme for the callback URL -->
