@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/activity_settings"
     android:layout_width="match_parent"
+    style = "@style/SCREEN"
     android:layout_height="match_parent">
 
     <!-- Add your UI elements for authentication here -->
@@ -11,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/you_are_logged_in_to_spotify_wrapped"
+        style = "@style/TEXT"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_centerInParent="true" />

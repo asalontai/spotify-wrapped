@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -48,6 +49,9 @@ public class AuthActivity extends AppCompatActivity {
         super.onNewIntent(intent);
 
         Uri uri = intent.getData();
+
+        Log.i("New uri: ", String.valueOf(uri));
+
         if (uri != null) {
             // Check if the callback URL matches the logout URL
             if ("spotify-wrapped".equals(uri.getScheme()) && "logout".equals(uri.getHost())) {

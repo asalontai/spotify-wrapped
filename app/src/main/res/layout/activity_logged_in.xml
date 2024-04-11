@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
+    style = "@style/SCREEN"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        style = "@style/SCREEN"
         android:orientation="vertical">
 
         <Button
+            style = "@style/BUTTON"
             android:id="@+id/btnLogout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Log Out Of Spotify"
-            android:onClick="logoutOnClick" />
+            android:onClick="logoutOnClick"/>
+            <!-- why is the logoutOnClick button red  is it working? -->
 
         <TextView
             android:id="@+id/token_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style = "@style/TEXT"
             android:layout_margin="8dp"
             tools:text="Token:" />
 
 
 
         <TextView
+            style = "@style/TEXT"
             android:id="@+id/code_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,6 +44,7 @@
 
 
         <TextView
+            style = "@style/TEXT"
             android:id="@+id/response_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,6 +56,7 @@
             android:layout_height="wrap_content">
 
             <Button
+                style = "@style/BUTTON"
                 android:id="@+id/profile_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -57,6 +66,7 @@
                 android:text="Get User Profile" />
         </LinearLayout>
       <Button
+          style = "@style/BUTTON"
         android:id="@+id/accountBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

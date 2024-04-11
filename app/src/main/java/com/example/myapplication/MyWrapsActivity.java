@@ -17,7 +17,9 @@ public class MyWrapsActivity extends AppCompatActivity {
         toMyAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(MyWrapsActivity.this, SettingsActivity.class);
+
                 startActivity(intent);
             }
         });
