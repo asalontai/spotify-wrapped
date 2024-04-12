@@ -18,6 +18,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.spotify.sdk.android.auth.AuthorizationClient;
 import com.spotify.sdk.android.auth.AuthorizationRequest;
 import com.spotify.sdk.android.auth.AuthorizationResponse;
@@ -28,12 +32,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class LoggedInActivity extends AppCompatActivity {
 
@@ -47,6 +57,9 @@ public class LoggedInActivity extends AppCompatActivity {
 
 
     private TextView tokenTextView, codeTextView, profileTextView, welcomeMessageName;
+    private TextView pastWrap1;
+    private TextView pastWrap2;
+    private TextView pastWrap3;
 
     private ImageView profileImage;
   
@@ -64,6 +77,40 @@ public class LoggedInActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        // Initialize TextViews
+        pastWrap1 = findViewById(R.id.pastWrap1);
+        pastWrap2 = findViewById(R.id.pastWrap2);
+        pastWrap3 = findViewById(R.id.pastWrap3);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionRef = db.collection("wraps");
+
+        // Perform a query to retrieve documents from the collection
+        collectionRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            // Iterate over the documents
+            int index = 0;
+            for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                // Access the desired field from each document
+                String fieldValue = document.getString("wrapJson");
+                // Do something with the field value
+                Log.d("Firestore", "Field value: " + fieldValue);
+                switch (index) {
+                    case 0:
+                        pastWrap1.setText(fieldValue);
+                        break;
+                    case 1:
+                        pastWrap2.setText(fieldValue);
+                        break;
+                    case 2:
+                        pastWrap3.setText(fieldValue);
+                        break;
+                }
+                index++;
+            }
+        }).addOnFailureListener(e -> {
+            // Handle failures
+            Log.e("Firestore", "Error getting documents", e);
+        });
 
         //settings button is to go to generate a new wrap page
         settingsBtn = findViewById(R.id.accountBtn);
@@ -74,6 +121,7 @@ public class LoggedInActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         // Add any initialization or setup code for your logged-in view
 
         // Initialize the views

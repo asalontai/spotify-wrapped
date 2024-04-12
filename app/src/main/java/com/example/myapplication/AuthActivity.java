@@ -372,52 +372,10 @@ public class AuthActivity extends AppCompatActivity {
             }
         });
     }
-
-//    private void loadImage(String imageUrl, ImageView imageView) {
-//        Picasso.get().load(imageUrl).into(imageView);
-//    }
-//
-//    private void onDataFetched() {
-//        if (completedCalls == 2) {
-//            runOnUiThread(() -> {
-//                // Update UI elements with artist and track data
-//                text1.setText(artistNames[0]);
-//                text2.setText(artistNames[1]);
-//                text3.setText(artistNames[2]);
-//                text4.setText(artistNames[3]);
-//                text5.setText(artistNames[4]);
-//
-//                loadImage(artistImageUrls[0], image1);
-//                loadImage(artistImageUrls[1], image2);
-//                loadImage(artistImageUrls[2], image3);
-//                loadImage(artistImageUrls[3], image4);
-//                loadImage(artistImageUrls[4], image5);
-//
-//                text6.setText(trackNames[0]);
-//                text7.setText(trackNames[1]);
-//                text8.setText(trackNames[2]);
-//                text9.setText(trackNames[3]);
-//                text10.setText(trackNames[4]);
-//
-//                loadImage(trackImageUrls[0], image6);
-//                loadImage(trackImageUrls[1], image7);
-//                loadImage(trackImageUrls[2], image8);
-//                loadImage(trackImageUrls[3], image9);
-//                loadImage(trackImageUrls[4], image10);
-//            });
-//        }
-//    }
-//
     private void cancelCall(Call mCall) {
         if (mCall != null) {
             mCall.cancel();
         }
     }
-//
-//    @Override
-//    protected void onDestroy() {
-//        cancelCall(stCall);
-//        super.onDestroy();
-//    }
 
 }

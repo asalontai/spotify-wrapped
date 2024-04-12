@@ -1,8 +1,9 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-
+import com.google.gson.Gson;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -17,6 +18,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -33,6 +43,10 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 interface ResponseLogic {
     void handleResponse(Response response) throws IOException;
@@ -53,11 +67,14 @@ public class MyWrapsActivity extends AppCompatActivity {
     private int completedCalls = 0;
     private String listeningHistory = "";
 
+    public static Date currentTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         stopPlaying();
         setContentView(R.layout.activity_my_wraps);
+        currentTime = Calendar.getInstance().getTime();
         toMyAccountBtn = findViewById(R.id.MyAccountBtn);
         toMyAccountBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,18 +115,21 @@ public class MyWrapsActivity extends AppCompatActivity {
             completedCalls = 0; // Reset completed calls counter
             getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=5&offset=0"); // Pass the callback
             getArtist("https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=5&offset=0");
+            createWrap("year", artistNames, trackNames);
             stopPlaying();
         });
         sixMonths.setOnClickListener((v) -> {
             completedCalls = 0; // Reset completed calls counter
             getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=5&offset=0"); // Pass the callback
             getArtist("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=5&offset=0");
+            createWrap("six_months", artistNames, trackNames);
             stopPlaying();
         });
         current.setOnClickListener((v) -> {
             completedCalls = 0; // Reset completed calls counter
             getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5&offset=0"); // Pass the callback
             getArtist("https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5&offset=0");
+            createWrap("current", artistNames, trackNames);
             stopPlaying();
         });
 
@@ -300,5 +320,41 @@ public class MyWrapsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LLMActivity.class);
         intent.putExtra("listeningHistory", listeningHistory);
         startActivity(intent);
+    }
+
+    private void createWrap(String timeRange, String[] artistNames, String[] trackNames) {
+        // Create a Gson instance
+        Gson gson = new Gson();
+        // Serialize wrap information into JSON
+        String wrapJson = gson.toJson(new Wrap(AuthActivity.userName, timeRange, Calendar.getInstance().getTime(), artistNames, trackNames));
+
+        // Get a reference to the Firestore collection for wraps
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference wrapsCollection = db.collection("wraps");
+
+        // Add the wrap JSON string to Firestore
+        wrapsCollection.add(new HashMap<String, Object>() {{
+                    put("wrapJson", wrapJson);
+                    put("user", AuthActivity.userName);
+                    put("timeStamp", Calendar.getInstance().getTime());
+                }})
+                .addOnSuccessListener(documentReference -> Log.d("Firebase", "Wrap added with ID: " + documentReference.getId()))
+                .addOnFailureListener(e -> Log.e("Firebase", "Error adding wrap", e));
+    }
+
+    class Wrap {
+        String user;
+        String timeRange;
+        Date timestamp;
+        String[] artistNames;
+        String[] trackNames;
+
+        public Wrap(String user, String timeRange, Date timestamp, String[] artistNames, String[] trackNames) {
+            this.user = user;
+            this.timeRange = timeRange;
+            this.timestamp = timestamp;
+            this.artistNames = artistNames;
+            this.trackNames = trackNames;
+        }
     }
 }
