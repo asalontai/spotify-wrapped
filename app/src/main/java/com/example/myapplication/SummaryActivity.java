@@ -94,7 +94,7 @@ public class SummaryActivity extends AppCompatActivity {
         next6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SummaryActivity.this, MyWrapsActivity.class);
+                Intent intent = new Intent(SummaryActivity.this, LoggedInActivity.class);
                 // Pass data as extras to the intent
                 intent.putExtra("artistNames", artistNames);
                 intent.putExtra("artistImageUrls", artistImageUrls);

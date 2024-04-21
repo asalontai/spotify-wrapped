@@ -28,7 +28,7 @@ public class FifthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
+        setContentView(R.layout.activity_fifth);
 
         text9 = findViewById(R.id.text1);
         image9 = findViewById(R.id.image1);

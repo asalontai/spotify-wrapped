@@ -7,6 +7,13 @@
     tools:ignore="ExtraText">
 
     <!-- TextView to display the generated text -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your AI Evaluation"
+        android:textSize="30sp" />
+
     <TextView
         android:id="@+id/generatedText"
         android:layout_width="wrap_content"
@@ -18,9 +25,10 @@
     <!-- Button to navigate back to activity_my_wraps.xml -->
     <Button
         android:id="@+id/backButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Back"
+        android:backgroundTint="#CD7EB7"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
