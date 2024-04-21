@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,11 +28,18 @@ public class LLMActivity extends AppCompatActivity {
 
     // Access your API key as a Build Configuration variable
     private String apiKey = "AIzaSyCrLmZQjP11qVRdNx_lAq7c4T4i96NW2E8";
-
+    private Button backButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_llm);
+
+        backButton = findViewById(R.id.backButton);
+
+        String[] artistNames = getIntent().getStringArrayExtra("artistNames");
+        String[] artistImageUrls = getIntent().getStringArrayExtra("artistImageUrls");
+        String[] trackNames = getIntent().getStringArrayExtra("trackNames");
+        String[] trackImageUrls = getIntent().getStringArrayExtra("trackImageUrls");
         String listeningHistory = getIntent().getStringExtra("listeningHistory");
         // Initialize the GenerativeModel
         GenerativeModel gm = new GenerativeModel(MODEL_NAME, apiKey);
@@ -64,6 +72,20 @@ public class LLMActivity extends AppCompatActivity {
                 // Handle error or inform user about failure
             }
         }, executor);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LLMActivity.this, SummaryActivity.class);
+                // Pass data as extras to the intent
+                intent.putExtra("artistNames", artistNames);
+                intent.putExtra("artistImageUrls", artistImageUrls);
+                intent.putExtra("trackNames", trackNames);
+                intent.putExtra("trackImageUrls", trackImageUrls);
+                intent.putExtra("listeningHistory", listeningHistory);
+                startActivity(intent);
+            }
+        });
     }
 
     // Method to update the generated text in the TextView
@@ -75,12 +97,6 @@ public class LLMActivity extends AppCompatActivity {
                 generatedTextView.setText(text);
             }
         });
-    }
-
-    public void onBackButtonClick(View view) {
-        // Navigate back to activity_my_wraps.xml
-        Intent intent = new Intent(this, MyWrapsActivity.class);
-        startActivity(intent);
     }
 
 }
