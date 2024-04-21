@@ -4,59 +4,88 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     tools:context=".MyWrapsActivity">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:text="My Wrap"
-        android:textSize="34sp"
-        android:textStyle="bold"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/year"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="27dp" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <Button
-        android:id="@+id/year"
-        android:layout_width="130dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="156dp"
-        android:layout_marginBottom="508dp"
-        android:text="+ Generate 1 Year"
-        app:cornerRadius="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pick a timespan for your Spotify Wrapped."
+            android:textSize="34sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_gravity="start"
+            android:layout_marginBottom="20dp"/>
 
-    <Button
-        android:id="@+id/sixMonth"
-        android:layout_width="130dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="156dp"
-        android:layout_marginBottom="380dp"
-        android:text="+ Generate 6 Month"
-        app:cornerRadius="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <!-- Added space below the TextView -->
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="340dp"/>
 
-    <Button
-        android:id="@+id/current"
-        android:layout_width="120dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="164dp"
-        android:layout_marginBottom="268dp"
-        android:text="+ Generate Current"
-        app:cornerRadius="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <!-- Buttons -->
+        <Button
+            android:id="@+id/year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="+ 1 Year"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#CD7EB7"
+            android:backgroundTint="@android:color/white"
+            android:layout_gravity="start"/>
 
+        <Button
+            android:id="@+id/sixMonth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="+ 6 Month"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#CD7EB7"
+            android:backgroundTint="@android:color/white"
+            android:layout_gravity="start"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/current"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="+ Your Current Listening Habits"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#CD7EB7"
+            android:backgroundTint="@android:color/white"
+            android:layout_gravity="start"
+            android:layout_marginTop="20dp"/>
+    </LinearLayout>
+
+    <!-- My Account Button -->
     <Button
         android:id="@+id/MyAccountBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:text="My Account"
-        app:cornerRadius="0dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#CD7EB7"
+        android:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="16dp" />
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
