@@ -236,6 +236,7 @@ public class MyWrapsActivity extends AppCompatActivity {
                 intent.putExtra("artistImageUrls", artistImageUrls);
                 intent.putExtra("trackNames", trackNames);
                 intent.putExtra("trackImageUrls", trackImageUrls);
+                intent.putExtra("listeningHistory", listeningHistory);
                 startActivity(intent);
             });
         }
@@ -266,12 +267,6 @@ public class MyWrapsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-    public void onGemButtonClick(View view) {
-        // Start LLMActivity when the button is clicked
-        Intent intent = new Intent(this, LLMActivity.class);
-        intent.putExtra("listeningHistory", listeningHistory);
-        startActivity(intent);
     }
 
     private void createWrap(String timeRange, String[] artistNames, String[] trackNames) {

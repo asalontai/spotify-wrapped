@@ -35,6 +35,9 @@
             android:name=".FifthActivity"
             android:exported="false" />
         <activity
+            android:name=".SummaryActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity2"
             android:exported="false" /> <!-- Specify LoggedInActivity -->
         <activity
