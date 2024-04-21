@@ -77,20 +77,26 @@
             android:id="@+id/pastWrap1"
             android:layout_width="match_parent"
             android:layout_height="121dp"
-            android:text="TextView" />
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            android:text="TextView"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/pastWrap2"
             android:layout_width="match_parent"
             android:layout_height="143dp"
-            android:text="TextView" />
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp"
+            android:text="TextView"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/pastWrap3"
             android:layout_width="match_parent"
             android:layout_height="161dp"
-            android:text="TextView" />
-
+            android:text="TextView"
+            android:textSize="16sp" />
 
     </LinearLayout>
 

@@ -82,9 +82,10 @@ public class LoggedInActivity extends AppCompatActivity {
         pastWrap2 = findViewById(R.id.pastWrap2);
         pastWrap3 = findViewById(R.id.pastWrap3);
 
+        Log.d("Firestore", "");
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionRef = db.collection("wraps");
-
         // Perform a query to retrieve documents from the collection
         collectionRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
             // Iterate over the documents
@@ -92,25 +93,37 @@ public class LoggedInActivity extends AppCompatActivity {
             for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
                 // Access the desired field from each document
                 String fieldValue = document.getString("wrapJson");
-                // Do something with the field value
-                Log.d("Firestore", "Field value: " + fieldValue);
-                switch (index) {
-                    case 0:
-                        pastWrap1.setText(fieldValue);
-                        break;
-                    case 1:
-                        pastWrap2.setText(fieldValue);
-                        break;
-                    case 2:
-                        pastWrap3.setText(fieldValue);
-                        break;
+                String userName = document.getString("user");
+                if (userName != null && userName.equals(AuthActivity.userName)) {
+                    // Filter out non-alphanumeric characters, commas, colons, and spaces
+                    String filteredValue = fieldValue.replaceAll("[^\\p{L}0-9,:\\s]+", "")
+                            .replaceAll("(user:[^,]+|timeRange:[^,]+)", "")
+                            .replaceAll("artistNames", "Top Artists:")
+                            .replaceAll("trackNames", "\nTop Tracks:")
+                            .replaceAll("timestamp", "\nTimestamp:");
+
+                    // Do something with the filtered value
+                    Log.d("Firestore", "Filtered value: " + filteredValue);
+                    switch (index) {
+                        case 0:
+                            pastWrap1.setText(filteredValue);
+                            break;
+                        case 1:
+                            pastWrap2.setText(filteredValue);
+                            break;
+                        case 2:
+                            pastWrap3.setText(filteredValue);
+                            break;
+                    }
+                    index++;
                 }
-                index++;
             }
         }).addOnFailureListener(e -> {
             // Handle failures
             Log.e("Firestore", "Error getting documents", e);
         });
+
+
 
         //settings button is to go to generate a new wrap page
         settingsBtn = findViewById(R.id.accountBtn);
