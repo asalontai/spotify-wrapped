@@ -20,6 +20,21 @@
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
+            android:name=".FirstActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SecondActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ThirdActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FourthActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FifthActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity2"
             android:exported="false" /> <!-- Specify LoggedInActivity -->
         <activity

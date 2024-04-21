@@ -43,6 +43,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -56,8 +58,6 @@ public class MyWrapsActivity extends AppCompatActivity {
 
     private final OkHttpClient client = new OkHttpClient();
     private String sToken = AuthActivity.accessToken;
-    private ImageView image1, image2, image3, image4, image5, image6, image7, image8, image9, image10;
-    private TextView text1, text2, text3, text4, text5, text6, text7, text8, text9, text10;
     private String[] artistNames = new String[5], artistImageUrls = new String[5];
     private String[] trackNames = new String[5], trackImageUrls = new String[5], trackURIs = new String[5];
     private String[] trackClipUrls = new String[5];
@@ -85,71 +85,34 @@ public class MyWrapsActivity extends AppCompatActivity {
             }
         });
 
-        text1 = findViewById(R.id.text1);
-        text2 = findViewById(R.id.text2);
-        text3 = findViewById(R.id.text3);
-        text4 = findViewById(R.id.text4);
-        text5 = findViewById(R.id.text5);
-        text6 = findViewById(R.id.text6);
-        text7 = findViewById(R.id.text7);
-        text8 = findViewById(R.id.text8);
-        text9 = findViewById(R.id.text9);
-        text10 = findViewById(R.id.text10);
+        year = findViewById(R.id.year);
+        sixMonths = findViewById(R.id.sixMonth);
+        current = findViewById(R.id.current);
 
-        image1 = findViewById(R.id.image1);
-        image2 = findViewById(R.id.image2);
-        image3 = findViewById(R.id.image3);
-        image4 = findViewById(R.id.image4);
-        image5 = findViewById(R.id.image5);
-        image6 = findViewById(R.id.image6);
-        image7 = findViewById(R.id.image7);
-        image8 = findViewById(R.id.image8);
-        image9 = findViewById(R.id.image9);
-        image10 = findViewById(R.id.image10);
 
-        Button year = findViewById(R.id.year);
-        Button sixMonths = findViewById(R.id.sixMonth);
-        Button current = findViewById(R.id.current);
-
-        year.setOnClickListener((v) -> {
-            completedCalls = 0; // Reset completed calls counter
-            getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=5&offset=0"); // Pass the callback
-            getArtist("https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=5&offset=0");
-            createWrap("year", artistNames, trackNames);
-            stopPlaying();
-        });
-        sixMonths.setOnClickListener((v) -> {
-            completedCalls = 0; // Reset completed calls counter
-            getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=5&offset=0"); // Pass the callback
-            getArtist("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=5&offset=0");
-            createWrap("six_months", artistNames, trackNames);
-            stopPlaying();
-        });
-        current.setOnClickListener((v) -> {
-            completedCalls = 0; // Reset completed calls counter
-            getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5&offset=0"); // Pass the callback
-            getArtist("https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5&offset=0");
-            createWrap("current", artistNames, trackNames);
-            stopPlaying();
+        year.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                completedCalls = 0; // Reset completed calls counter
+                getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=5&offset=0"); // Pass the callback
+                getArtist("https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=5&offset=0");
+            }
         });
 
-        imageClick(image6, 0);
-        imageClick(image7, 1);
-        imageClick(image8, 2);
-        imageClick(image9, 3);
-        imageClick(image10, 4);
-    }
-    public void imageClick(ImageView image, int i) {
-        image.setOnClickListener((v) -> {
-            stopPlaying();
-            isStreaming = false;
-
-            if (isStreaming) {
-                stopPlaying();
-                isStreaming = false;
-            } else {
-                startAudioStream(trackClipUrls[i]);
-                isStreaming = true;
+        sixMonths.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                completedCalls = 0; // Reset completed calls counter
+                getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit=5&offset=0"); // Pass the callback
+                getArtist("https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=5&offset=0");
+            }
+        });
+        current.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                completedCalls = 0; // Reset completed calls counter
+                getTracks("https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit=5&offset=0"); // Pass the callback
+                getArtist("https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit=5&offset=0");
             }
         });
     }
@@ -175,7 +138,8 @@ public class MyWrapsActivity extends AppCompatActivity {
                                 JSONObject image = images.getJSONObject(0); // Assuming the first image is the one to be displayed
                                 artistImageUrls[i] = image.getString("url");
                             }
-
+                            Log.d("ArtistName", Arrays.toString(artistNames));
+                            Log.d("ArtistImages", Arrays.toString(artistImageUrls));
                             completedCalls++;
                             onDataFetched();
                         } catch(JSONException j) {
@@ -262,29 +226,17 @@ public class MyWrapsActivity extends AppCompatActivity {
             listeningHistory = listeningHistoryBuilder.toString().trim();
             runOnUiThread(() -> {
                 // Update UI elements with artist and track data
-                text1.setText(artistNames[0]);
-                text2.setText(artistNames[1]);
-                text3.setText(artistNames[2]);
-                text4.setText(artistNames[3]);
-                text5.setText(artistNames[4]);
-
-                loadImage(artistImageUrls[0], image1);
-                loadImage(artistImageUrls[1], image2);
-                loadImage(artistImageUrls[2], image3);
-                loadImage(artistImageUrls[3], image4);
-                loadImage(artistImageUrls[4], image5);
-
-                text6.setText(trackNames[0]);
-                text7.setText(trackNames[1]);
-                text8.setText(trackNames[2]);
-                text9.setText(trackNames[3]);
-                text10.setText(trackNames[4]);
-
-                loadImage(trackImageUrls[0], image6);
-                loadImage(trackImageUrls[1], image7);
-                loadImage(trackImageUrls[2], image8);
-                loadImage(trackImageUrls[3], image9);
-                loadImage(trackImageUrls[4], image10);
+                Log.d("ArtistName", Arrays.toString(artistNames));
+                Log.d("ArtistImages", Arrays.toString(artistImageUrls));
+                Log.d("Tracknames", Arrays.toString(trackNames));
+                Log.d("TrackImages", Arrays.toString(trackImageUrls));
+                createWrap("current", artistNames, trackNames);
+                Intent intent = new Intent(MyWrapsActivity.this, FirstActivity.class);
+                intent.putExtra("artistNames", artistNames);
+                intent.putExtra("artistImageUrls", artistImageUrls);
+                intent.putExtra("trackNames", trackNames);
+                intent.putExtra("trackImageUrls", trackImageUrls);
+                startActivity(intent);
             });
         }
     }
