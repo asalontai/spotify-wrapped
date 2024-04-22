@@ -39,6 +39,7 @@ public class SummaryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_summary);
+        MyWrapsActivity.stopPlaying();
 
         st1 = findViewById(R.id.st1);
         st2 = findViewById(R.id.st2);
@@ -65,6 +66,12 @@ public class SummaryActivity extends AppCompatActivity {
         next6 = findViewById(R.id.next6);
 
         genButton = findViewById(R.id.Gem);
+
+        MyWrapsActivity.imageClick(si1, 0);
+        MyWrapsActivity.imageClick(si2, 1);
+        MyWrapsActivity.imageClick(si3, 2);
+        MyWrapsActivity.imageClick(si4, 3);
+        MyWrapsActivity.imageClick(si5, 4);
 
         Intent intent = getIntent();
         String[] artistNames = intent.getStringArrayExtra("artistNames");
@@ -213,20 +220,6 @@ public class SummaryActivity extends AppCompatActivity {
 
     private void loadImage(String imageUrl, ImageView imageView) {
         Picasso.get().load(imageUrl).into(imageView);
-    }
-
-    public void startAudioStream(String url) {
-        if (m == null)
-            m = new MediaPlayer();
-        try {
-            m.setDataSource(url);
-            m.prepare();
-            m.setVolume(1f, 1f);
-            m.setLooping(false);
-            m.start();
-        } catch (Exception e) {
-            Log.d("AUDIO", "Error playing in SoundHandler: " + e.toString());
-        }
     }
 
     @Override

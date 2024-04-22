@@ -60,10 +60,10 @@ public class MyWrapsActivity extends AppCompatActivity {
     private String sToken = AuthActivity.accessToken;
     private String[] artistNames = new String[5], artistImageUrls = new String[5];
     private String[] trackNames = new String[5], trackImageUrls = new String[5], trackURIs = new String[5];
-    private String[] trackClipUrls = new String[5];
+    private static String[] trackClipUrls = new String[5];
     private Button toMyAccountBtn, year, sixMonths, current;
-    private MediaPlayer m;
-    private boolean isStreaming = false;
+    private static MediaPlayer m;
+    private static boolean isStreaming = false;
     private int completedCalls = 0;
     private String listeningHistory = "";
 
@@ -116,6 +116,25 @@ public class MyWrapsActivity extends AppCompatActivity {
             }
         });
     }
+
+    public static void imageClick(ImageView image, int i) {
+        image.setOnClickListener((v) -> {
+            stopPlaying();
+            isStreaming = false;
+            Log.d("PLAYER", "CLICKED");
+            m = null;
+            if (isStreaming) {
+                stopPlaying();
+                isStreaming = false;
+                Log.d("PLAYER", "Stopped");
+            } else {
+                startAudioStream(trackClipUrls[i]);
+                isStreaming = true;
+                Log.d("PLAYER", "Playing");
+            }
+        });
+    }
+
     private void getArtist(String url) {
         fetchRequest(
                 new Request.Builder()
@@ -169,6 +188,7 @@ public class MyWrapsActivity extends AppCompatActivity {
                                 trackNames[i] = curr.getString("name");
 
                                 trackClipUrls[i] = curr.getString("preview_url");
+                                Log.d("TRACKS", trackClipUrls[i]);
 
                                 JSONObject album = curr.getJSONObject("album");
                                 JSONArray images = album.getJSONArray("images");
@@ -187,7 +207,7 @@ public class MyWrapsActivity extends AppCompatActivity {
                     }
                 });
     }
-    public void startAudioStream(String url) {
+    public static void startAudioStream(String url) {
         if (m == null)
             m = new MediaPlayer();
         try {
@@ -200,7 +220,7 @@ public class MyWrapsActivity extends AppCompatActivity {
             Log.d("AUDIO", "Error playing in SoundHandler: " + e.toString());
         }
     }
-    private void stopPlaying() {
+    public static void stopPlaying() {
         if (m != null && m.isPlaying()) {
             m.stop();
             m.release();

@@ -33,7 +33,8 @@ public class LLMActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_llm);
-
+        MyWrapsActivity.stopPlaying();
+        
         backButton = findViewById(R.id.backButton);
 
         String[] artistNames = getIntent().getStringArrayExtra("artistNames");

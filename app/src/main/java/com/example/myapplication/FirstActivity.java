@@ -44,6 +44,7 @@ public class FirstActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first);
+        MyWrapsActivity.stopPlaying();
 
         text1 = findViewById(R.id.text1);
         image1 = findViewById(R.id.image1);
@@ -52,6 +53,7 @@ public class FirstActivity extends AppCompatActivity {
         image2 = findViewById(R.id.image2);
 
         next1 = findViewById(R.id.next1);
+
 
         Intent intent = getIntent();
         String[] artistNames = intent.getStringArrayExtra("artistNames");
@@ -138,12 +140,7 @@ public class FirstActivity extends AppCompatActivity {
             text2.setText(artistNames[0]);
         }
 
-        image1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle image click event
-            }
-        });
+        MyWrapsActivity.imageClick(image1, 0);
 
         next1.setOnClickListener(new View.OnClickListener() {
             @Override

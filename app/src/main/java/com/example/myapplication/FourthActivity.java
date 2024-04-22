@@ -39,6 +39,7 @@ public class FourthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fourth);
+        MyWrapsActivity.stopPlaying();
 
         text7 = findViewById(R.id.text1);
         image7 = findViewById(R.id.image1);
@@ -47,6 +48,8 @@ public class FourthActivity extends AppCompatActivity {
         image8 = findViewById(R.id.image2);
 
         next4 = findViewById(R.id.next1);
+
+        MyWrapsActivity.imageClick(image7, 3);
 
         Intent intent = getIntent();
         String[] artistNames = intent.getStringArrayExtra("artistNames");
