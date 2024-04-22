@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -60,6 +61,10 @@ public class LoggedInActivity extends AppCompatActivity {
     private TextView pastWrap1;
     private TextView pastWrap2;
     private TextView pastWrap3;
+
+    private Timestamp pastWrap1Date;
+    private Timestamp pastWrap2Date;
+    private Timestamp pastWrap3Date;
 
     private ImageView profileImage;
   
@@ -106,12 +111,15 @@ public class LoggedInActivity extends AppCompatActivity {
                     Log.d("Firestore", "Filtered value: " + filteredValue);
                     switch (index) {
                         case 0:
+                            pastWrap1Date = document.getTimestamp("timeStamp");
                             pastWrap1.setText(filteredValue);
                             break;
                         case 1:
+                            pastWrap2Date = document.getTimestamp("timeStamp");
                             pastWrap2.setText(filteredValue);
                             break;
                         case 2:
+                            pastWrap3Date = document.getTimestamp("timeStamp");
                             pastWrap3.setText(filteredValue);
                             break;
                     }
@@ -121,6 +129,31 @@ public class LoggedInActivity extends AppCompatActivity {
         }).addOnFailureListener(e -> {
             // Handle failures
             Log.e("Firestore", "Error getting documents", e);
+        });
+
+        pastWrap1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirstActivity.setWrapDate(pastWrap1Date);
+                Intent intent = new Intent(LoggedInActivity.this, FirstActivity.class);
+                startActivity(intent);
+            }
+        });
+        pastWrap2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirstActivity.setWrapDate(pastWrap2Date);
+                Intent intent = new Intent(LoggedInActivity.this, FirstActivity.class);
+                startActivity(intent);
+            }
+        });
+        pastWrap3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirstActivity.setWrapDate(pastWrap3Date);
+                Intent intent = new Intent(LoggedInActivity.this, FirstActivity.class);
+                startActivity(intent);
+            }
         });
 
 

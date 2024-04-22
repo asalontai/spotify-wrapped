@@ -230,7 +230,7 @@ public class MyWrapsActivity extends AppCompatActivity {
                 Log.d("ArtistImages", Arrays.toString(artistImageUrls));
                 Log.d("Tracknames", Arrays.toString(trackNames));
                 Log.d("TrackImages", Arrays.toString(trackImageUrls));
-                createWrap("current", artistNames, trackNames);
+                createWrap("current", artistNames, trackNames, artistImageUrls, trackImageUrls);
                 Intent intent = new Intent(MyWrapsActivity.this, FirstActivity.class);
                 intent.putExtra("artistNames", artistNames);
                 intent.putExtra("artistImageUrls", artistImageUrls);
@@ -269,20 +269,26 @@ public class MyWrapsActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void createWrap(String timeRange, String[] artistNames, String[] trackNames) {
+    private void createWrap(String timeRange, String[] artistNames, String[] trackNames, String[] artistImageURLs, String[] trackImageURLs) {
         // Create a Gson instance
         Gson gson = new Gson();
         // Serialize wrap information into JSON
         String wrapJson = gson.toJson(new Wrap(AuthActivity.userName, timeRange, Calendar.getInstance().getTime(), artistNames, trackNames));
 
+        // Convert arrays to JSON strings
+        String artistImageURLsJson = gson.toJson(artistImageURLs);
+        String trackImageURLsJson = gson.toJson(trackImageURLs);
+
         // Get a reference to the Firestore collection for wraps
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference wrapsCollection = db.collection("wraps");
 
-        // Add the wrap JSON string to Firestore
+        // Add the wrap JSON string and arrays to Firestore
         wrapsCollection.add(new HashMap<String, Object>() {{
                     put("wrapJson", wrapJson);
                     put("user", AuthActivity.userName);
+                    put("artistImageURLs", artistImageURLsJson);
+                    put("trackImageURLs", trackImageURLsJson);
                     put("timeStamp", Calendar.getInstance().getTime());
                 }})
                 .addOnSuccessListener(documentReference -> Log.d("Firebase", "Wrap added with ID: " + documentReference.getId()))
