@@ -47,7 +47,7 @@ public class LLMActivity extends AppCompatActivity {
 
         // Create a content object with text-only input
         Content content = new Content.Builder()
-                .addText("Given this listening history, write 5 character traits about the person. Start your response with 'Based on your listening history, you are...', and after listing the character traits, in a new line, recommend a few real songs related to those in the listening history." + listeningHistory)
+                .addText("Given this listening history, write 5 character traits about the person. Start your response with 'Based on your listening history, you are...', and after listing the character traits, in a new line, recommend a few real artists related to those in the listening history." + listeningHistory)
                 .build();
         Log.d("content: ", listeningHistory);
         // Create an executor
