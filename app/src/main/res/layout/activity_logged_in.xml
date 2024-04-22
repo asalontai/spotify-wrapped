@@ -90,7 +90,6 @@
             android:id="@+id/pastWrap2"
             android:layout_width="match_parent"
             android:layout_height="143dp"
-            android:layout_marginTop="12dp"
             android:layout_marginBottom="16dp"
             android:text="TextView"
             android:textSize="16sp" />
@@ -100,7 +99,9 @@
             android:layout_width="match_parent"
             android:layout_height="161dp"
             android:text="TextView"
+            android:layout_marginBottom="16dp"
             android:textSize="16sp" />
+
 
     </LinearLayout>
 
