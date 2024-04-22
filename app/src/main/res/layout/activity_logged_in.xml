@@ -8,6 +8,12 @@
     tools:context=".MainActivity"
     android:background="@color/white">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:layout_weight="1"
+        app:layout_constraintTop_toTopOf="parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,8 +22,6 @@
         android:layout_marginBottom="50px"
         android:layout_marginLeft="40px"
         android:layout_marginRight="40px">
-
-
 
         <Button
             android:id="@+id/landingToAccount"
@@ -100,6 +104,9 @@
 
     </LinearLayout>
 
+    </ScrollView>
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -110,13 +117,7 @@
         android:layout_marginLeft="30px"
         android:layout_marginRight="30px">
 
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Log Out Of Spotify (this button will be deleted later)"
-            android:onClick="logoutOnClick"
-            android:backgroundTint="#D9D9D9"/>
+
         <Button
             android:id="@+id/accountBtn"
             android:layout_width="match_parent"
@@ -125,6 +126,14 @@
             android:text="+ Generate New Wrap"
             android:textColor="@color/white"
             android:backgroundTint="#CD7EB7"/>
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:onClick="logoutOnClick"
+            android:backgroundTint="#BFBFBF"/>
 
     </LinearLayout>
 

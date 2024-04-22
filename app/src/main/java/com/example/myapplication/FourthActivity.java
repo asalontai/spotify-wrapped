@@ -38,7 +38,7 @@ public class FourthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
+        setContentView(R.layout.activity_fourth);
 
         text7 = findViewById(R.id.text1);
         image7 = findViewById(R.id.image1);

@@ -38,7 +38,7 @@ public class ThirdActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first);
+        setContentView(R.layout.activity_third);
 
         text5 = findViewById(R.id.text1);
         image5 = findViewById(R.id.image1);
